@@ -16,14 +16,19 @@ Route::get('/', function () {
 });
 
 
-Route::get('tareas/{nombre?}', function($nombre = "usuario"){
+//Route::get('tareas/{nombre?}', function($nombre = "usuario"){
 
-$nombre = strtoupper($nombre);
-return view('tareas.tareasIndex')-> with (['nombre'=> $nombre]);
+//$nombre = strtoupper($nombre);
+//return view('tareas.tareasIndex')-> with (['nombre'=> $nombre]);
 
 
 
-});
+//});
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::resource('tareas','TareaController');
+//route::post('tarea','TareaController@store');
+//route::get('tarea','TareaController@index');
+
