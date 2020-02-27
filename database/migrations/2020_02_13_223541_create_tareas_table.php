@@ -19,10 +19,11 @@ class CreateTareasTable extends Migration
             $table->date('fecha_inicio');
             $table->date('fecha_termino');
             $table->text('descripcion');
-            $table->unsignedBigInteger('categoria_id')->nullable()->default(null);
-            $table->unsignedBigInteger('user_id')->nullable()->default(null);
+            //$table->unsignedBigInteger('categoria_id')->nullable()->default(null);
+            //$table->unsignedBigInteger('user_id')->nullable()->default(null);
+            //$table->text('Prioridad');
             $table->smallInteger('prioridad')->unsigned();
-            $table->string('estatus')->default('Por Hacer');
+            //$table->string('estatus')->default('Por Hacer');
             $table->boolean('terminada')->default(0);
             $table->timestamps();
 
