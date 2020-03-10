@@ -14,11 +14,8 @@
                         <tr>
                             <th>ID</th>
                             <th>Tarea</th>
-                            <th>Descripcion</th>
-                            <th>Fecha Inicio</th>
-                            <th>Fecha Termino</th>
-                            <th>Usuario</th>
-                            <th>Categoria</th>
+                            <th>Accion</th>
+                          
                         </tr>
                         @foreach($tareas as $tarea)
                             <tr>
@@ -28,11 +25,10 @@
                                         {{ $tarea->nombre_tarea }}
                                     </a>
                                 </td>
-                                <td>{{ $tarea->descripcion }}</td>
-                                <td>{{ $tarea->fecha_inicio->format('d/m/Y') }}</td>
-                                <td>{{ $tarea->fecha_termino->format('d/m/Y') }}</td>
-                                <td>{{ $tarea->user->name }}</td>
-                                <td>{{ $tarea->categoria->nombre_categoria }}</td>
+                                <td>{{ $equipo->id }}</td>
+                                <td>{{ $equipo->nombre_equipo }}</td>
+
+                               <a href="{{route}}"
                             </tr>
                         @endforeach
                     </table>

@@ -5,50 +5,58 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">Dashboard</div>
+                <div class="card-header">Captura de nueva tarea</div>
 
                 <div class="card-body">
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
 
-                    <form action="{{route('tareas.store')}}" method="POST">
-                        @csrf
+                @isset($tarea)
+                    {!! Form::model($tarea, ['route' => ['tarea.update', $tarea->id], 'method' => 'PATCH']) !!}
+                @else
+                    {!! Form::open(['route' => 'tarea.store']) !!}
+                @endisset()
                         <div class="form-group">
-                            <label for="nombre_tarea">Tarea</label>
-                            <input type="text" class="form-control" name="nombre_tarea"  placeholder="Nombre de la tarea">
+                            {!! Form::label('nombre_tarea', 'Tarea') !!}
+                            {!! Form::text('nombre_tarea', null, ['class' => 'form-control', 'id' => 'nombre_tarea']) !!}
+                        </div>
+                        <div class="form-group">
+                            <label for="fecha_inicio">Fecha Inicio</label>
+                            {!! Form::date('fecha_inicio', isset($tarea) ? $tarea->fecha_inicio->toDateString() : null, ['class' => 'form-control']) !!}
+                        </div>
+                        <div class="form-group">
+                            <label for="fecha_termino">Fecha Término</label>
+                            {!! Form::date('fecha_termino', isset($tarea) ? $tarea->fecha_termino->toDateString() : null, ['class' => 'form-control']) !!}
+                        </div>
+                        <div class="form-group">
+                            <label for="descripcion">Descripción</label>
+                            {!! Form::textarea('descripcion', null, ['class' => 'form-control', 'rows' => '3']) !!}
+                        </div>
+                        <div class="form-group">
+                            <label for="prioridad">Prioridad</label>
+                            {!! Form::select('prioridad', [
+                                '1' => 'Baja',
+                                '5' => 'Media',
+                                '10' => 'Alta'
+                                ], null, ['class' => 'form-control']) !!}
                         </div>
 
                         <div class="form-group">
-                          <label for="fecha_inicio">Fecha Inicio</label>
-                          <input type="date" class="form-control" name="fecha_inicio" >
+                            <label for="prioridad">Categoria</label>
+                            {!! Form::select('categoria_id', $categorias, null, ['class' => 'form-control']) !!}
                         </div>
-
-                        <div class="form-group">
-                            <label for="fecha_termino">Fecha Final</label>
-                            <input type="date" class="form-control" name="fecha_termino" >
-                        </div>
-
-                        <div class="form-group">
-                            <label for="descripcion">descripcion</label>
-                            <input type="text" class="form-control" name="descripcion"  placeholder="Descripcion">
-                        </div>
-
-                        <label for="prioridad">Prioridad</label>
-                          <select multiple class="form-control"  name="prioridad">
-                            <option value= "1">Baja</option>
-                            <option value= "5">Media</option>
-                            <option value= "10">Alta</option>
-                          </select>
-
-                        <div> <button type="submit" class="btn btn-primary" >Submit form</button> </div>
-
+                        <button type="submit" class="btn btn-primary">Crear</button>
+                    {!! Form::close() !!}
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-
-
-
-
-
-    @endsection
+@endsection

@@ -28,7 +28,11 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::resource('tareas','TareaController');
+Route::resource('tareas','TareaController'); 
+
+Route::resource('equipo','EquipoController');
+//->middleware('auth'); //solo se ´puede acceder a ellos iniciando sesion, se puede crear un construcutor en TareaController
+
 //route::post('tarea','TareaController@store');
 //route::get('tarea','TareaController@index');
 

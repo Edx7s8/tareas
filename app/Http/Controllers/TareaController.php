@@ -1,3 +1,4 @@
+  
 <?php
 
 namespace App\Http\Controllers;
@@ -7,6 +8,11 @@ use Illuminate\Http\Request;
 
 class TareaController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth')->except(['index', 'show']);//->only([])
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,13 +20,8 @@ class TareaController extends Controller
      */
     public function index()
     {
-        //
-
-        $tarea = Tarea::all();
-        //dd($tareas);
-        //return view('tareas.tareasIndex')->with(['tareas'=>$tarea]);
-        return view('tareas.tareasIndex',compact('tareas'));
-
+        $tareas = Tarea::all();
+        return view('tareas.tareaIndex', compact('tareas'));
     }
 
     /**
@@ -30,7 +31,6 @@ class TareaController extends Controller
      */
     public function create()
     {
-        //
         return view('tareas.tareaForm');
     }
 
@@ -42,21 +42,23 @@ class TareaController extends Controller
      */
     public function store(Request $request)
     {
-        //
-       // dd($request->all());
+        $request->validate([
+            'tarea' => 'required|max:255',
+            'descripcion' => 'required',
+            'fecha_entrega' => 'required|date',
+            'prioridad' => 'required|int|min:1|max:10',
+        ]);
+$request->merge(['user_id' =>\Auth::id()]);
 
-        $tarea = new Tarea();
-    
-        $tarea->nombre_tarea = $request->nombre_tarea;
-        $tarea->fecha_inicio = $request->fecha_inicio;
-        $tarea->fecha_termino = $request->fecha_termino;
+Tarea::create($request->all());
+        /*$tarea = new Tarea();
+        $tarea->user_id = \Auth::id();
+        $tarea->tarea = $request->tarea;
         $tarea->descripcion = $request->descripcion;
+        $tarea->fecha_entrega = $request->fecha_entrega;
         $tarea->prioridad = $request->prioridad;
         $tarea->save();
-
-        
-        return 'Datos Recibidos';
-
+*/
         return redirect()->route('tarea.index');
     }
 
@@ -68,7 +70,6 @@ class TareaController extends Controller
      */
     public function show(Tarea $tarea)
     {
-        //
         return view('tareas.tareaShow', compact('tarea'));
     }
 
@@ -80,15 +81,7 @@ class TareaController extends Controller
      */
     public function edit(Tarea $tarea)
     {
-        //
-        $tarea->nombre_tarea = $request->nombre_tarea;
-        $tarea->fecha_inicio = $request->fecha_inicio;
-        $tarea->fecha_termino = $request->fecha_termino;
-        $tarea->descripcion = $request->descripcion;
-        $tarea->prioridad = $request->prioridad;
-        $tarea->save();
-
-        return redirect()->route('tarea.show',)
+        return view('tareas.tareaForm', compact('tarea'));
     }
 
     /**
@@ -100,7 +93,24 @@ class TareaController extends Controller
      */
     public function update(Request $request, Tarea $tarea)
     {
-        //
+        $request->validate([
+            'tarea' => 'required|max:5',
+            'descripcion' => 'required',
+            'fecha_entrega' => 'required|date',
+            'fecha_termino' => 'required|date',
+            'prioridad' => 'required|int|min:1|max:10',
+        ]);
+
+
+       Tarea::where('id',$tarea->id)->update($request->except('_token', '_method'));
+
+        /*$tarea->tarea = $request->tarea;
+        $tarea->descripcion = $request->descripcion;
+        $tarea->fecha_entrega = $request->fecha_entrega;
+        $tarea->prioridad = $request->prioridad;
+        $tarea->save();
+*/
+        return redirect()->route('tarea.show', $tarea->id);
     }
 
     /**
@@ -111,6 +121,7 @@ class TareaController extends Controller
      */
     public function destroy(Tarea $tarea)
     {
-        //
+        $tarea->delete();
+        return redirect()->route('tarea.index');
     }
 }
