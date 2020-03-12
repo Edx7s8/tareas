@@ -14,6 +14,7 @@
                         <tr>
                             <th>ID</th>
                             <th>Tarea</th>
+                            <th>Integrantes</th>
                             <th>Accion</th>
                           
                         </tr>
@@ -25,10 +26,11 @@
                                         {{ $tarea->nombre_tarea }}
                                     </a>
                                 </td>
+
                                 <td>{{ $equipo->id }}</td>
                                 <td>{{ $equipo->nombre_equipo }}</td>
 
-                               <a href="{{route}}"
+                               <a href="{{route('equipo_id', $equipo)}}">
                             </tr>
                         @endforeach
                     </table>

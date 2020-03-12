@@ -18,7 +18,7 @@
                         </div>
                     @endif
 
-                @isset($tarea)
+                @isset($equipo)
                     {!! Form::model($equipo, ['route' => ['equipo.update', $equipo->id], 'method' => 'PATCH']) !!}
                 @else
                     {!! Form::open(['route' => 'equipo.store']) !!}
@@ -30,7 +30,7 @@
 
                         <div class="form-group">
                             <label for="prioridad">Integrantes</label>
-                            {!! Form::select('user_id', $users, null, ['class' => 'form-control']) !!}
+                            {!! Form::select('user_id', $users, isset($equipo) ? $equipo->users()->pluck('id') : null, ['class' => 'form-control','multiple']) !!}
                         </div>
                         <button type="submit" class="btn btn-primary">Crear</button>
                     {!! Form::close() !!}

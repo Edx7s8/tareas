@@ -1,16 +1,16 @@
-  
 <?php
 
 namespace App\Http\Controllers;
 
 use App\Tarea;
+use App\Categoria;
 use Illuminate\Http\Request;
 
 class TareaController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth')->except(['index', 'show']);//->only([])
+        $this->middleware('auth')->except('index');
     }
 
     /**
@@ -21,6 +21,7 @@ class TareaController extends Controller
     public function index()
     {
         $tareas = Tarea::all();
+
         return view('tareas.tareaIndex', compact('tareas'));
     }
 
@@ -31,7 +32,8 @@ class TareaController extends Controller
      */
     public function create()
     {
-        return view('tareas.tareaForm');
+        $categorias = Categoria::all()->pluck('nombre_categoria', 'id');
+        return view('tareas.tareaForm', compact('categorias'));
     }
 
     /**
@@ -43,22 +45,16 @@ class TareaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'tarea' => 'required|max:255',
-            'descripcion' => 'required',
-            'fecha_entrega' => 'required|date',
+            'nombre_tarea' => 'required|max:255',
+            'fecha_inicio' => 'required|date',
+            'fecha_termino' => 'required|date',
+            'descripcion' => 'required|min:5',
             'prioridad' => 'required|int|min:1|max:10',
         ]);
-$request->merge(['user_id' =>\Auth::id()]);
 
-Tarea::create($request->all());
-        /*$tarea = new Tarea();
-        $tarea->user_id = \Auth::id();
-        $tarea->tarea = $request->tarea;
-        $tarea->descripcion = $request->descripcion;
-        $tarea->fecha_entrega = $request->fecha_entrega;
-        $tarea->prioridad = $request->prioridad;
-        $tarea->save();
-*/
+        $request->merge(['user_id' => \Auth::id()]);
+        Tarea::create($request->all());
+
         return redirect()->route('tarea.index');
     }
 
@@ -81,7 +77,8 @@ Tarea::create($request->all());
      */
     public function edit(Tarea $tarea)
     {
-        return view('tareas.tareaForm', compact('tarea'));
+        $categorias = Categoria::all()->pluck('nombre_categoria', 'id');
+        return view('tareas.tareaForm', compact('tarea', 'categorias'));
     }
 
     /**
@@ -94,22 +91,16 @@ Tarea::create($request->all());
     public function update(Request $request, Tarea $tarea)
     {
         $request->validate([
-            'tarea' => 'required|max:5',
-            'descripcion' => 'required',
-            'fecha_entrega' => 'required|date',
+            'nombre_tarea' => 'required|max:255',
+            'fecha_inicio' => 'required|date',
             'fecha_termino' => 'required|date',
+            'descripcion' => 'required|min:5',
             'prioridad' => 'required|int|min:1|max:10',
         ]);
 
+        Tarea::where('id', $tarea->id)
+            ->update($request->except('_token', '_method'));
 
-       Tarea::where('id',$tarea->id)->update($request->except('_token', '_method'));
-
-        /*$tarea->tarea = $request->tarea;
-        $tarea->descripcion = $request->descripcion;
-        $tarea->fecha_entrega = $request->fecha_entrega;
-        $tarea->prioridad = $request->prioridad;
-        $tarea->save();
-*/
         return redirect()->route('tarea.show', $tarea->id);
     }
 

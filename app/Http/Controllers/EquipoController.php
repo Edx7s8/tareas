@@ -60,7 +60,7 @@ class EquipoController extends Controller
     public function edit(Equipo $equipo)
     {
         $users= User::all()->pluck('name','id');
-        return view('equipos.equipoForm', compact('equipo'));
+        return view('equipos.equipoForm', compact('equipo', 'users'));
     }
 
     /**
